@@ -1,0 +1,140 @@
+# Source: https://github.com/Der4NDR3/MyConky/
+
+###################### Settings
+update_interval 2.5
+background yes
+own_window yes
+own_window_type normal
+own_window_transparent yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
+# Use XFT? Required to Force UTF8 (see below).
+use_xft yes
+xftfont LiberationSans:size=9.85
+xftalpha 0.5
+text_buffer_size 2048
+
+# This is the number of times Conky will update before quitting.
+# Set to zero to run forever.
+total_run_times 0
+
+# Use double buffering (reduces flicker, may not work for everyone)
+double_buffer yes
+
+# Minimum size of text area
+minimum_size 200 10
+
+# Maximum width
+maximum_width 300
+
+# Draw shades?
+draw_shades no
+
+# Draw outlines?
+draw_outline yes
+
+# Draw borders around text
+draw_borders no
+
+# Draw borders around graphs
+draw_graph_borders no
+
+# Stippled borders?
+# stippled_borders 8
+
+# border margins
+# border_margin 2
+
+# border width
+# border_width 1
+
+# Default colors and also border colors
+default_color white
+default_shade_color red
+default_outline_color black
+
+# Text alignment, other possible values are commented
+#alignment top_left
+alignment top_right
+#alignment bottom_left
+#alignment bottom_right
+#alignment none
+
+# Gap between borders of screen and text
+# same thing as passing -x at command line
+gap_x 12
+gap_y 12
+
+# Subtract file system buffers from used memory?
+no_buffers yes
+
+# set to yes if you want all text to be in uppercase
+uppercase no
+
+# number of cpu samples to average
+# set to 1 to disable averaging
+cpu_avg_samples 2
+
+# Force UTF8? note that UTF8 support required XFT
+override_utf8_locale yes
+
+# variable is given either in format $variable or in ${variable}
+
+# stuff after 'TEXT' will be formatted on screen
+
+
+
+
+TEXT
+######################
+${font sans-serif:bold:size=10}SYSTEM ${hr 1}
+Hostname:$alignr$nodename
+Kernel: $alignr$sysname $kernel
+Uptime:$alignr$uptime
+
+###################### Network
+${font sans-serif:bold:size=10}NETWORK ${hr 1}
+wlan0:$alignr${addr wlan0}
+eth1:$alignr${addr eth1}
+
+####################### CPU
+${font sans-serif:bold:size=10}CPU ${hr 1}
+${cpugraph cpu1}
+${cpugraph cpu2}
+CPU1: ${cpu cpu1}% $alignr ${execi 30 sensors | grep "Core 0" | cut -c18-21}°C
+${color lightgray}${cpubar cpu1}$color
+CPU2: ${cpu cpu2}% $alignr ${execi 30 sensors | grep "Core 1" | cut -c18-21}°C
+${color lightgray}${cpubar cpu2}$color
+CPU3: ${cpu cpu3}%
+${color lightgray}${cpubar cpu2}$color
+CPU4: ${cpu cpu4}%
+${color lightgray}${cpubar cpu2}$color
+
+###################### RAM
+${font sans-serif:bold:size=10}MEMORY ${hr 1}
+RAM: $mem / $memmax $alignr ${memperc}%
+${color lightgray}$membar$color
+
+####################### GPU
+## I Use the AMD property driver
+## Mybe you need to edit / change this lines for your GPU drivers
+${font sans-serif:bold:size=10}GPU ${hr 1}
+#% Load ${execi 1 aticonfig --adapter=0 --od-getclocks | grep "GPU" | cut -c 31-35}
+Load$alignr${execi 1 aticonfig --adapter=0 --od-getclocks | grep "Current Clocks : " | cut -c 31-34}MHz
+Temp$alignr${execi 1 aticonfig --adapter=0 --od-gettemperature | tail -n1 | gawk '{ printf $5 }'}°C
+Fan Speed$alignr${execi 1 aticonfig --pplib-cmd "get fanspeed 0" | grep Result | cut -c 20-24}
+
+####################### HDD
+${font sans-serif:bold:size=10}HDD ${hr 1}
+Root:   ${fs_used_perc /}% ${color lightgray}${fs_bar /}$color
+Daten: ${fs_used_perc /media/MyUser/Daten/}% ${color lightgray}${fs_bar /media/MyUser/Daten/}$color
+Book:   ${fs_used_perc /media/MyUser/MyHDD/}% ${color lightgray}${fs_bar /media/MyUser/MyHDD/}$color
+#Swap: $swapperc% ${color lightgray}$swapbar$color
+
+######################## Prozesse
+${font sans-serif:bold:size=10}PROZESSE ${hr 1}
+${top name 1}$alignr${top cpu 1}
+${top name 2}$alignr${top cpu 2}
+${top name 3}$alignr${top cpu 3}
+${top name 4}$alignr${top cpu 4}
+${top name 5}$alignr${top cpu 5}
